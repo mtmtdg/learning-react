@@ -1,10 +1,11 @@
-import "./App.css";
-import Home from "./pages/Home/Home";
+import './App.css';
+import Viewer from './components/Viewer/Viewer';
 
 function App() {
   return (
     <div className="App">
-      <Home />
+      <div className="header">React sample</div>
+      <Viewer />
     </div>
   );
 }
