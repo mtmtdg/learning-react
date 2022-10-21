@@ -3,4 +3,5 @@
     margin: 8px;
     -webkit-box-shadown: 1px 1px 10px #999;
     box-shadow: 1px 1px 10px #999;
+    height: calc(100% - 150px);
 }
