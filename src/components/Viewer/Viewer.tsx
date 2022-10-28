@@ -28,7 +28,7 @@ export default function Viewer(props: ViewerProps) {
     WebViewer(
       {
         path: '/webviewer/lib',
-        initialDoc: 'page4.pptx',
+        initialDoc: 'nablarch.pptx',
         disabledElements: ['header'],
         isReadOnly: true,
         enableAnnotations: false,
@@ -46,7 +46,7 @@ export default function Viewer(props: ViewerProps) {
       annotationManager.enableReadOnlyMode();
 
       // only show one page
-      UI.setLayoutMode(UI.LayoutMode.Single);
+      /* UI.setLayoutMode(UI.LayoutMode.Single); */
 
       // disable pan and select button
       UI.disableTools([Tools.ToolNames.PAN, Tools.ToolNames.EDIT, Tools.ToolNames.MARQUEE]);
