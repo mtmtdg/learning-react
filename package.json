@@ -50,6 +50,7 @@
   },
   "devDependencies": {
     "@types/sortablejs": "^1.15.0",
-    "generate-react-cli": "^7.4.0"
+    "generate-react-cli": "^7.4.0",
+    "sass": "^1.56.1"
   }
 }
