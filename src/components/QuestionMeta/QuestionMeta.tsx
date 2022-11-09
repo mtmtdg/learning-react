@@ -1,6 +1,8 @@
 import { Dispatch, SetStateAction, SyntheticEvent, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Question } from '../../models';
+import CheckGroup from '../CheckGroup/CheckGroup';
+import RadioGroup from '../RadioGroup/RadioGroup';
 import styles from './QuestionMeta.module.scss';
 
 interface QuestionMetaProps {
@@ -60,36 +62,8 @@ export default function QuestionMeta({ question, setQuestion }: QuestionMetaProp
         <textarea {...register('content', { required: true })} />
 
         <label>Answer</label>
-        <div>
-          {/* just dynamically change {type} cause data model (data type) not updated correctly
-           * single("A") => multi(expected ["A"]) => change multi(expected ["A", "B"]) but get "B"
-           * multi(["A", "B"]) => single(expected ["A"] or ["B"] or null) => change single(expected "A") but get ["A"]
-           * entire <input> should be re-rendered
-           * angular differentiates [attr.type] from [type] but react seems not
-           */}
-          {options.map((option, i) => (
-            <label key={i}>
-              {/* MDN: return type of a input is always string */}
-              {qTypeValue === 'single' && (
-                <input
-                  style={{ display: 'inline' }}
-                  type="radio"
-                  value={i}
-                  {...register('answer', { required: true })}
-                />
-              )}
-              {qTypeValue === 'multi' && (
-                <input
-                  style={{ display: 'inline' }}
-                  type="checkbox"
-                  value={i}
-                  {...register('answer', { required: true })}
-                />
-              )}
-              {option}
-            </label>
-          ))}
-        </div>
+        {qTypeValue === 'single' && <RadioGroup options={options} registed={register('answer', { required: true })} />}
+        {qTypeValue === 'multi' && <CheckGroup options={options} registed={register('answer', { required: true })} />}
 
         <label>Analysis</label>
         <input {...register('analysis')} />
