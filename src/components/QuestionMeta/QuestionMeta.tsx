@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { Dispatch, SetStateAction, SyntheticEvent, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Question } from '../../models';
 import styles from './QuestionMeta.module.scss';
@@ -31,14 +31,18 @@ export default function QuestionMeta({ question, setQuestion }: QuestionMetaProp
   const [qTypeValue, contentValue] = watch(['qType', 'content']);
   const options: string[] = contentValue?.split('\n').filter((x: string) => x) || [];
 
-  useEffect(() => {
+  const handleQTypeChange = (e: SyntheticEvent) => {
     /* auto: qType changed => render UI only => (other op) => change event & update model
      * manual: qType changed => render UI only => manual update model
      * [auto] can also prevents user from submitting, but the button status will be wrong for a moment
      * so, [manual]
      */
+
+    /*
+     * not useEffect: setValue will be called after init, because qType changed from '' to 'single'
+     */
     setValue('answer', null);
-  }, [qTypeValue]);
+  };
 
   return (
     <div className={styles.QuestionMeta}>
@@ -47,7 +51,7 @@ export default function QuestionMeta({ question, setQuestion }: QuestionMetaProp
         <input {...register('title', { required: false })} />
 
         <label>Type</label>
-        <select {...register('qType', { required: true })}>
+        <select {...register('qType', { required: true, onChange: handleQTypeChange })}>
           <option value="single">single</option>
           <option value="multi">multi</option>
         </select>
