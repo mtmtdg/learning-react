@@ -77,11 +77,8 @@ export default function QuestionMeta({ question, setQuestion }: QuestionMetaProp
         <input {...register('analysis')} />
 
         <button disabled={isError(errors)}>ok</button>
-        <div>{JSON.stringify(sanitize(errors))}</div>
-        <button onClick={() => console.log(getValues())}>log</button>
+        <div>{JSON.stringify(watch())}</div>
       </form>
-
-      <div>{JSON.stringify(watch())}</div>
     </div>
   );
 }

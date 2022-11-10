@@ -37,7 +37,7 @@ function App() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
-      <div style={{ maxWidth: '500px' }}>
+      <div style={{ width: '500px' }}>
         {/* ReactSortable<T extends ItemInterface>
          * interface ItemInterface {id: string|number, selected?, chosen?, filtered?, any}
          */}
@@ -48,8 +48,6 @@ function App() {
             </div>
           ))}
         </ReactSortable>
-        <div>current: {JSON.stringify(currentQuestion)}</div>
-        <div>all: {JSON.stringify(questions)}</div>
       </div>
 
       <div>

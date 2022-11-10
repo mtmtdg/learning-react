@@ -23,7 +23,6 @@ export default function PreviewCard({ index, question, handleDelete }: PreviewCa
 
       <CardContent>
         <h5>{question.title}</h5>
-        <div>{JSON.stringify(question)}</div>
         {options.map((option, i) => (
           <label key={i} style={{ display: 'block' }}>
             <input type={question.qType === 'single' ? 'radio' : 'checkbox'} value={i} checked={isRight(i)} readOnly />
@@ -34,7 +33,14 @@ export default function PreviewCard({ index, question, handleDelete }: PreviewCa
       </CardContent>
 
       <CardActions sx={{ justifyContent: 'flex-end' }}>
-        <button onClick={() => handleDelete(question.id)}>delete</button>
+        <button
+          onClick={event => {
+            event.stopPropagation();
+            handleDelete(question.id);
+          }}
+        >
+          delete
+        </button>
       </CardActions>
     </Card>
   );
