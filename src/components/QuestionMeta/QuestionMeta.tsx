@@ -6,8 +6,8 @@ import RadioGroup from '../RadioGroup/RadioGroup';
 import styles from './QuestionMeta.module.scss';
 
 interface QuestionMetaProps {
-  question: Question;
-  setQuestion: Dispatch<SetStateAction<Question>>;
+  question?: Question;
+  setQuestion: Dispatch<SetStateAction<Question | undefined>>;
 }
 
 export default function QuestionMeta({ question, setQuestion }: QuestionMetaProps) {
@@ -19,16 +19,24 @@ export default function QuestionMeta({ question, setQuestion }: QuestionMetaProp
     formState: { errors, touchedFields },
     getValues,
     setValue,
+    reset,
   } = useForm({
     mode: 'all',
-    defaultValues: question,
+    defaultValues: question, // not trigger form re-render after question changed, tends to keep edited values
   });
-  const onSubmit: SubmitHandler<any> = data => setQuestion(data);
+  const onSubmit: SubmitHandler<any> = data => setQuestion(Object.assign({}, question, data));
 
-  // check on mount
+  // check on init
   useEffect(() => {
     trigger();
   }, []);
+
+  // manually re-render form after question changed
+  useEffect(() => {
+    reset(); // react-hook-form bug: reset(question) does not clear all value and then set value
+    reset(question);
+    trigger();
+  }, [question]);
 
   const [qTypeValue, contentValue] = watch(['qType', 'content']);
   const options: string[] = contentValue?.split('\n').filter((x: string) => x) || [];

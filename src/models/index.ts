@@ -1,4 +1,5 @@
 export interface Question {
+  id: number;
   title: string;
   qType: 'single' | 'multi';
   content: string;
