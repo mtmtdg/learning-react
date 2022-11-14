@@ -1,7 +1,10 @@
+// https://www.tiny.cloud/docs/configure/localization/
+// https://www.tiny.cloud/docs/configure/localization/#usingthecommunitylanguagepacks
+// download language package, unzip to public/tinymce/langs
 import { Editor } from '@tinymce/tinymce-react';
 import { Editor as TinyMCEEditor } from 'tinymce';
 
-import { useMemo, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 interface TinymceEditorProps {}
 
@@ -20,6 +23,9 @@ export default function TinymceEditor(props: TinymceEditorProps) {
         tinymceScriptSrc={process.env.PUBLIC_URL + '/tinymce/tinymce.min.js'}
         onInit={(evt, editor) => (editorRef.current = editor)}
         onChange={fetchLatestContent}
+        init={{
+          language: 'zh-Hans',
+        }}
       />
 
       <h1>Value</h1>
