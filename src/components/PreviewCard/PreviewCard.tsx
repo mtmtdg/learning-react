@@ -5,9 +5,10 @@ interface PreviewCardProps {
   index: number;
   question: Question;
   handleDelete: (id: number) => void;
+  isSelected?: boolean;
 }
 
-export default function PreviewCard({ index, question, handleDelete }: PreviewCardProps) {
+export default function PreviewCard({ index, question, handleDelete, isSelected }: PreviewCardProps) {
   const options = question.content.split('\n').filter(x => x);
 
   function isRight(i: number): boolean {
@@ -18,7 +19,7 @@ export default function PreviewCard({ index, question, handleDelete }: PreviewCa
   }
 
   return (
-    <Card sx={{ border: '1rem solid', margin: '10px' }}>
+    <Card sx={{ border: '1rem solid', margin: '10px', backgroundColor: isSelected ? 'grey' : 'unset' }}>
       <CardHeader title={`Question ${index + 1}`} />
 
       <CardContent>

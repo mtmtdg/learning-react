@@ -44,7 +44,12 @@ function App() {
         <ReactSortable list={questions} setList={setQuestions}>
           {questions.map((question, i) => (
             <div key={i} onClick={() => setCurrentQuestion(question)}>
-              <PreviewCard index={i} question={question} handleDelete={_deleteById} />
+              <PreviewCard
+                index={i}
+                question={question}
+                handleDelete={_deleteById}
+                isSelected={currentQuestion?.id === question.id}
+              />
             </div>
           ))}
         </ReactSortable>
