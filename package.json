@@ -14,8 +14,11 @@
     "@types/node": "^16.7.13",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "draft-js": "^0.11.7",
+    "draftjs-to-html": "^0.9.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-draft-wysiwyg": "^1.15.0",
     "react-scripts": "5.0.1",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0"
@@ -45,6 +48,8 @@
     ]
   },
   "devDependencies": {
+    "@types/draftjs-to-html": "^0.8.1",
+    "@types/react-draft-wysiwyg": "^1.13.4",
     "generate-react-cli": "^7.4.0"
   }
 }
