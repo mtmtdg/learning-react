@@ -1,10 +1,10 @@
-import "./App.css";
-import Home from "./pages/Home/Home";
+import './App.css';
+import RDWEditor from './components/RDWEditor/RDWEditor';
 
 function App() {
   return (
     <div className="App">
-      <Home />
+      <RDWEditor />
     </div>
   );
 }
