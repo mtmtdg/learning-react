@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { ReactSortable } from 'react-sortablejs';
 import './App.css';
 import BasicInfoEditor from './components/BasicInfoEditor/BasicInfoEditor';
+import FunctionItem from './components/FunctionSwitcher/FunctionItem';
+import FunctionSwitcher from './components/FunctionSwitcher/FunctionSwitcher';
 import PreviewCard from './components/PreviewCard/PreviewCard';
 import QuestionMeta from './components/QuestionMeta/QuestionMeta';
 import { BasicInfo, Question } from './models';
@@ -71,11 +73,23 @@ function App() {
         </ReactSortable>
       </div>
 
-      <div>
-        <button onClick={() => addOne()}>add empty</button>
-        <QuestionMeta question={currentQuestion} setQuestion={setCurrentQuestion} />
-        <BasicInfoEditor basicInfo={basicInfo} setBasicInfo={setBasicInfo} />
-      </div>
+      <FunctionSwitcher>
+        <FunctionItem
+          key="basic setting"
+          label="basic setting"
+          element={<BasicInfoEditor basicInfo={basicInfo} setBasicInfo={setBasicInfo} />}
+        />
+        <FunctionItem
+          key="question meta"
+          label="question meta"
+          element={
+            <>
+              <button onClick={() => addOne()}>add empty</button>
+              <QuestionMeta question={currentQuestion} setQuestion={setCurrentQuestion} />
+            </>
+          }
+        />
+      </FunctionSwitcher>
     </div>
   );
 }
