@@ -25,6 +25,13 @@ function uploadFile1(file: File) {
   );
 }
 
+function tinyMCEUploadFile(blobInfo: any, progress: (i: number) => void): Promise<any> {
+  return new Promise(resolve => {
+    resolve('https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png');
+  });
+}
+
 export const fileUploadService = {
   uploadFile1,
+  tinyMCEUploadFile,
 };
