@@ -17,6 +17,7 @@ function App() {
 
   const addOne = () => {
     const newQ = { ...emptyQuestion };
+    newQ.id = Math.max(...questions.map(q => q.id)) + 1;
     setQuestions([...questions, newQ]);
     setCurrentQuestion(newQ);
   };
