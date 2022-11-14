@@ -5,6 +5,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import draftToHtml from 'draftjs-to-html';
 import prettier from 'prettier';
 import htmlParser from 'prettier/parser-html';
+import { fileUploadService } from '../../services/fileUploadService';
 
 interface RDWEditorProps {}
 
@@ -25,6 +26,9 @@ export default function RDWEditor(props: RDWEditorProps) {
         editorStyle={{
           border: 'solid 1px lightgrey',
           padding: '5px',
+        }}
+        toolbar={{
+          image: { uploadCallback: fileUploadService.uploadFile1 },
         }}
         localization={{
           locale: 'zh',
