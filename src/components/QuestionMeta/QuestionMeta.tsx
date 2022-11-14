@@ -35,7 +35,9 @@ export default function QuestionMeta({ question, setQuestion }: QuestionMetaProp
   useEffect(() => {
     reset(); // react-hook-form bug: reset(question) does not clear all value and then set value
     reset(question);
-    trigger();
+    /* DANGER react-hook-form bugs */
+    trigger(); // trigger 'answer' validation
+    setTimeout(trigger, 0); // trigger 'title, qType, content validation'
   }, [question]);
 
   const [qTypeValue, contentValue] = watch(['qType', 'content']);
@@ -58,7 +60,7 @@ export default function QuestionMeta({ question, setQuestion }: QuestionMetaProp
     <div className={styles.QuestionMeta}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label>Title</label>
-        <input {...register('title', { required: false })} />
+        <input {...register('title', { required: true })} />
 
         <label>Type</label>
         <select {...register('qType', { required: true, onChange: handleQTypeChange })}>
@@ -78,6 +80,7 @@ export default function QuestionMeta({ question, setQuestion }: QuestionMetaProp
 
         <button disabled={isError(errors)}>ok</button>
         <div>{JSON.stringify(watch())}</div>
+        <div>{JSON.stringify(sanitize(errors))}</div>
       </form>
     </div>
   );
