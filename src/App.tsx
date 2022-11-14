@@ -1,13 +1,18 @@
 import { useEffect, useState } from 'react';
 import { ReactSortable } from 'react-sortablejs';
 import './App.css';
+import BasicInfoEditor from './components/BasicInfoEditor/BasicInfoEditor';
 import PreviewCard from './components/PreviewCard/PreviewCard';
 import QuestionMeta from './components/QuestionMeta/QuestionMeta';
-import { Question } from './models';
+import { BasicInfo, Question } from './models';
 
 const emptyQuestion: Question = { id: 0, title: '', qType: 'single', content: '', answer: null };
 
 function App() {
+  const [basicInfo, setBasicInfo] = useState<BasicInfo>({
+    title: '',
+    message: '',
+  });
   const [questions, setQuestions] = useState<Question[]>([
     { id: 1, title: 'Where', qType: 'multi', content: '1\n2', answer: ['0', '1'] },
     { id: 2, title: 'When', qType: 'single', content: '1\n2', answer: '1' },
@@ -44,6 +49,11 @@ function App() {
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       <div style={{ width: '500px' }}>
+        <div>
+          basic setting:
+          <div>title: {basicInfo.title}</div>
+          <div>help message: {basicInfo.message}</div>
+        </div>
         {/* ReactSortable<T extends ItemInterface>
          * interface ItemInterface {id: string|number, selected?, chosen?, filtered?, any}
          */}
@@ -64,6 +74,7 @@ function App() {
       <div>
         <button onClick={() => addOne()}>add empty</button>
         <QuestionMeta question={currentQuestion} setQuestion={setCurrentQuestion} />
+        <BasicInfoEditor basicInfo={basicInfo} setBasicInfo={setBasicInfo} />
       </div>
     </div>
   );
