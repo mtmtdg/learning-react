@@ -21,6 +21,11 @@ function App() {
     setCurrentQuestion(newQ);
   };
 
+  // init selection
+  useEffect(() => {
+    setCurrentQuestion(questions[0]);
+  }, []);
+
   useEffect(() => {
     if (!currentQuestion) return;
     const target = questions.find(question => question.id === currentQuestion.id);
