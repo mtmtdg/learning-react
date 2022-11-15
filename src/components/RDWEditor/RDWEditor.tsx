@@ -1,10 +1,10 @@
-import { ContentState, convertFromHTML, convertToRaw, EditorState, RawDraftContentState } from 'draft-js';
+import { ContentState, convertFromHTML, convertToRaw, EditorState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { useEffect, useState } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { Question } from '../../models';
 import { fileUploadService } from '../../services/fileUploadService';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 interface RdwEditorProps {
   initRowData: Question;
