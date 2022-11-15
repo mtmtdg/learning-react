@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, SyntheticEvent, useEffect } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useMemo } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Question } from '../../models';
 import CheckGroup from '../CheckGroup/CheckGroup';
@@ -13,6 +13,7 @@ interface QuestionMetaProps {
 export default function QuestionMeta({ question, setQuestion }: QuestionMetaProps) {
   const {
     register,
+    unregister,
     handleSubmit,
     trigger,
     watch,
@@ -43,7 +44,11 @@ export default function QuestionMeta({ question, setQuestion }: QuestionMetaProp
   const [qTypeValue, contentValue] = watch(['qType', 'content']);
   const options: string[] = contentValue?.split('\n').filter((x: string) => x) || [];
 
-  const handleQTypeChange = (e: SyntheticEvent) => {
+  const isFeedBack: boolean = useMemo(() => {
+    return qTypeValue === 'input';
+  }, [qTypeValue]);
+
+  const handleQTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     /* auto: qType changed => render UI only => (other op) => change event & update model
      * manual: qType changed => render UI only => manual update model
      * [auto] can also prevents user from submitting, but the button status will be wrong for a moment
@@ -54,6 +59,16 @@ export default function QuestionMeta({ question, setQuestion }: QuestionMetaProp
      * not useEffect: setValue will be called after init, because qType changed from '' to 'single'
      */
     setValue('answer', null);
+
+    // 'content' can be controlled correctly on template
+    // only 'answer' needs to control manually, maybe child component cannot get newest value in onchangeevent
+    const latestQTypeValue = e.currentTarget.value;
+    if (latestQTypeValue === 'input') {
+      unregister(['answer']);
+    } else {
+      register('answer', { required: true });
+    }
+    trigger();
   };
 
   return (
@@ -66,17 +81,26 @@ export default function QuestionMeta({ question, setQuestion }: QuestionMetaProp
         <select {...register('qType', { required: true, onChange: handleQTypeChange })}>
           <option value="single">single</option>
           <option value="multi">multi</option>
+          <option value="input">input</option>
         </select>
 
-        <label>Content</label>
-        <textarea {...register('content', { required: true })} />
+        {!isFeedBack && (
+          <div>
+            <label>Content</label>
+            <textarea {...register('content', { required: true })} />
 
-        <label>Answer</label>
-        {qTypeValue === 'single' && <RadioGroup options={options} registed={register('answer', { required: true })} />}
-        {qTypeValue === 'multi' && <CheckGroup options={options} registed={register('answer', { required: true })} />}
+            <label>Answer</label>
+            {qTypeValue === 'single' && (
+              <RadioGroup options={options} registed={register('answer', { required: true })} />
+            )}
+            {qTypeValue === 'multi' && (
+              <CheckGroup options={options} registed={register('answer', { required: true })} />
+            )}
 
-        <label>Analysis</label>
-        <input {...register('analysis')} />
+            <label>Analysis</label>
+            <input {...register('analysis')} />
+          </div>
+        )}
 
         <button disabled={isError(errors)}>ok</button>
         <div>{JSON.stringify(watch())}</div>

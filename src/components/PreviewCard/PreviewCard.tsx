@@ -10,6 +10,7 @@ interface PreviewCardProps {
 
 export default function PreviewCard({ index, question, handleDelete, isSelected }: PreviewCardProps) {
   const options = question.content.split('\n').filter(x => x);
+  const isFeedback = question.qType === 'input';
 
   function isRight(i: number): boolean {
     if (question.qType === 'single') {
@@ -20,17 +21,29 @@ export default function PreviewCard({ index, question, handleDelete, isSelected 
 
   return (
     <Card sx={{ border: '1rem solid', margin: '10px', backgroundColor: isSelected ? 'grey' : 'unset' }}>
-      <CardHeader title={`Question ${index + 1}`} />
+      <CardHeader title={isFeedback ? 'Feedback' : `Question ${index + 1}`} />
 
       <CardContent>
         <h5>{question.title}</h5>
-        {options.map((option, i) => (
-          <label key={i} style={{ display: 'block' }}>
-            <input type={question.qType === 'single' ? 'radio' : 'checkbox'} value={i} checked={isRight(i)} readOnly />
-            {option}
-          </label>
-        ))}
-        <div>{question.analysis}</div>
+
+        {isFeedback ? (
+          <input readOnly />
+        ) : (
+          <div>
+            {options.map((option, i) => (
+              <label key={i} style={{ display: 'block' }}>
+                <input
+                  type={question.qType === 'single' ? 'radio' : 'checkbox'}
+                  value={i}
+                  checked={isRight(i)}
+                  readOnly
+                />
+                {option}
+              </label>
+            ))}
+            <div>{question.analysis}</div>
+          </div>
+        )}
       </CardContent>
 
       <CardActions sx={{ justifyContent: 'flex-end' }}>
