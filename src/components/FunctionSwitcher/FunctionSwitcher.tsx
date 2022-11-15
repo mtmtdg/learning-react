@@ -1,12 +1,12 @@
 import { Children, isValidElement, ReactNode, useEffect, useMemo, useState } from 'react';
-import FunctionItem from './FunctionItem';
+import { FunctionItem } from './FunctionItem';
 import styles from './FunctionSwitcher.module.css';
 
 interface FunctionSwitcherProps {
   children?: ReactNode;
 }
 
-export default function FunctionSwitcher({ children }: FunctionSwitcherProps) {
+export function FunctionSwitcher({ children }: FunctionSwitcherProps) {
   const [currentLabel, setCurrentLabel] = useState<string>('');
 
   const configMap = useMemo(() => {
