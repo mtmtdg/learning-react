@@ -66,6 +66,8 @@ export default function QuestionMeta({ question, setQuestion }: QuestionMetaProp
     // only 'answer' needs to control manually, maybe child component cannot get newest value in onchangeevent
     const latestQTypeValue = e.currentTarget.value;
     if (latestQTypeValue === 'input') {
+      setValue('content', '');
+      setValue('analysis', '');
       unregister(['answer']);
     } else {
       register('answer', { required: true });
