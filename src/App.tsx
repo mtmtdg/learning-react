@@ -8,18 +8,19 @@ import QuestionMeta from './components/QuestionMeta/QuestionMeta';
 import { BasicInfo, Question } from './models';
 
 const emptyQuestion: Question = { id: 0, title: '', qType: 'single', content: '', answer: null };
+const mockQuestions: Question[] = [
+  { id: 1, title: '<p>Where</p>', qType: 'multi', content: '1\n2', answer: ['0', '1'] },
+  { id: 2, title: '<p>When</p>', qType: 'single', content: '1\n2', answer: '1' },
+  { id: 3, title: '<p>Who</p>', qType: 'multi', content: '1\n2', answer: ['0'] },
+];
 
 function App() {
   const [basicInfo, setBasicInfo] = useState<BasicInfo>({
     title: '',
     message: '',
   });
-  const [questions, setQuestions] = useState<Question[]>([
-    { id: 1, title: '<p>Where</p>', qType: 'multi', content: '1\n2', answer: ['0', '1'] },
-    { id: 2, title: '<p>When</p>', qType: 'single', content: '1\n2', answer: '1' },
-    { id: 3, title: '<p>Who</p>', qType: 'multi', content: '1\n2', answer: ['0'] },
-  ]);
-  const [currentQuestion, setCurrentQuestion] = useState<Question>();
+  const [questions, setQuestions] = useState<Question[]>(mockQuestions);
+  const [currentQuestion, setCurrentQuestion] = useState<Question>(mockQuestions[0]);
 
   const addOne = () => {
     const newQ = { ...emptyQuestion };
@@ -27,11 +28,6 @@ function App() {
     setQuestions([...questions, newQ]);
     setCurrentQuestion(newQ);
   };
-
-  // init selection
-  useEffect(() => {
-    setCurrentQuestion(questions[0]);
-  }, []);
 
   useEffect(() => {
     if (!currentQuestion) return;

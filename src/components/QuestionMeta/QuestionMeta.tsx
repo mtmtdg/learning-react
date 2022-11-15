@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useMemo } from 'react';
+import { ChangeEvent, useEffect, useMemo } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Question } from '../../models';
 import CheckGroup from '../CheckGroup/CheckGroup';
@@ -8,7 +8,7 @@ import styles from './QuestionMeta.module.scss';
 
 interface QuestionMetaProps {
   question?: Question;
-  setQuestion: Dispatch<SetStateAction<Question | undefined>>;
+  setQuestion: (q: Question) => void;
 }
 
 export default function QuestionMeta({ question, setQuestion }: QuestionMetaProps) {
