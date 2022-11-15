@@ -77,6 +77,11 @@ export default function QuestionMeta({ question, setQuestion }: QuestionMetaProp
     <div className={styles.QuestionMeta}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label>Title</label>
+        {/*
+            <RdwEditor initRowData={getValues()} updateFormFieldValue={value => setValue('title', value)} />
+
+            is the simplest way,but lacks form validation
+          */}
         <Controller
           control={control}
           name="title"

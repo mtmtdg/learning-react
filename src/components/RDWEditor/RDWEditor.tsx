@@ -16,7 +16,8 @@ export default function RdwEditor({ updateFormFieldValue, initRowData }: RdwEdit
   const [editorState, setEditorState] = useState(initState);
 
   useEffect(() => {
-    // Use [id] to limit data change by parent
+    // Use [id] to response to data change caused by parent
+    // otherwise, data change caused by self will cause pointer go to head (data => html => data, pointer information lost)
     // Use an object containing (id, title) to *guarantee* the data is newest
     const { contentBlocks, entityMap } = convertFromHTML(initRowData.title);
     const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
