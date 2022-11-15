@@ -15,9 +15,9 @@ function App() {
     message: '',
   });
   const [questions, setQuestions] = useState<Question[]>([
-    { id: 1, title: 'Where', qType: 'multi', content: '1\n2', answer: ['0', '1'] },
-    { id: 2, title: 'When', qType: 'single', content: '1\n2', answer: '1' },
-    { id: 3, title: 'Who', qType: 'multi', content: '1\n2', answer: ['0'] },
+    { id: 1, title: '<p>Where</p>', qType: 'multi', content: '1\n2', answer: ['0', '1'] },
+    { id: 2, title: '<p>When</p>', qType: 'single', content: '1\n2', answer: '1' },
+    { id: 3, title: '<p>Who</p>', qType: 'multi', content: '1\n2', answer: ['0'] },
   ]);
   const [currentQuestion, setCurrentQuestion] = useState<Question>();
 

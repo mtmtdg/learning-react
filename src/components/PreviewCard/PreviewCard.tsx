@@ -24,7 +24,7 @@ export default function PreviewCard({ index, question, handleDelete, isSelected 
       <CardHeader title={isFeedback ? 'Feedback' : `Question ${index + 1}`} />
 
       <CardContent>
-        <h5>{question.title}</h5>
+        <div dangerouslySetInnerHTML={{ __html: question.title }}></div>
 
         {isFeedback ? (
           <input readOnly />

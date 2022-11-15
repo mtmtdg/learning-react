@@ -1,8 +1,9 @@
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useMemo } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Question } from '../../models';
 import CheckGroup from '../CheckGroup/CheckGroup';
 import RadioGroup from '../RadioGroup/RadioGroup';
+import RDWEditor from '../RDWEditor/RDWEditor';
 import styles from './QuestionMeta.module.scss';
 
 interface QuestionMetaProps {
@@ -19,6 +20,7 @@ export default function QuestionMeta({ question, setQuestion }: QuestionMetaProp
     watch,
     formState: { errors, touchedFields },
     getValues,
+    control,
     setValue,
     reset,
   } = useForm({
@@ -75,7 +77,12 @@ export default function QuestionMeta({ question, setQuestion }: QuestionMetaProp
     <div className={styles.QuestionMeta}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label>Title</label>
-        <input {...register('title', { required: true })} />
+        <Controller
+          control={control}
+          name="title"
+          render={({ field }) => <RDWEditor initRowData={getValues()} updateFormFieldValue={field.onChange} />}
+          rules={{ required: true }}
+        />
 
         <label>Type</label>
         <select {...register('qType', { required: true, onChange: handleQTypeChange })}>
