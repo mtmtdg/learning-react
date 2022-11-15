@@ -13,10 +13,16 @@ export default function PreviewCard({ index, question, handleDelete, isSelected 
   const isFeedback = question.qType === 'input';
 
   function isRight(i: number): boolean {
-    if (question.qType === 'single') {
-      return (question.answer as any) == i;
+    if (!question.answer) {
+      return false;
     }
-    return (question.answer as string[]).map(x => +x).includes(i);
+    if (question.qType === 'single' && !isNaN(+question.answer)) {
+      return +question.answer === i;
+    }
+    if (question.qType === 'multi' && Array.isArray(question.answer)) {
+      return (question.answer as string[]).map(x => +x).includes(i);
+    }
+    return false;
   }
 
   return (
