@@ -1,5 +1,7 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { ChangeEvent, useEffect, useMemo } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import * as yup from 'yup';
 import { Question } from '../../models';
 import CheckGroup from '../CheckGroup/CheckGroup';
 import RadioGroup from '../RadioGroup/RadioGroup';
@@ -11,10 +13,30 @@ interface QuestionMetaProps {
   setQuestion: (q: Question) => void;
 }
 
+const schema = yup.object().shape({
+  title: yup.string().required('title is required'),
+  qType: yup.string().required('type is required'),
+  content: yup
+    .string()
+    .when('qType', (qType, contentSchema) =>
+      qType === 'input' ? contentSchema : contentSchema.required('content is required')
+    ),
+  answer: yup.mixed().when('qType', (qType, answerSchema) => {
+    switch (qType) {
+      case 'input':
+        return answerSchema;
+      case 'single':
+        return yup.string().required();
+      case 'multi':
+        return yup.array().of(yup.string()).min(1).required();
+    }
+  }),
+  analysis: yup.string(),
+});
+
 export default function QuestionMeta({ question, setQuestion }: QuestionMetaProps) {
   const {
     register,
-    unregister,
     handleSubmit,
     trigger,
     watch,
@@ -26,6 +48,7 @@ export default function QuestionMeta({ question, setQuestion }: QuestionMetaProp
   } = useForm({
     mode: 'all',
     defaultValues: question, // not trigger form re-render after question changed, tends to keep edited values
+    resolver: yupResolver(schema),
   });
   const onSubmit: SubmitHandler<any> = data => setQuestion(Object.assign({}, question, data));
 
@@ -36,11 +59,8 @@ export default function QuestionMeta({ question, setQuestion }: QuestionMetaProp
 
   // manually re-render form after question changed
   useEffect(() => {
-    reset(); // react-hook-form bug: reset(question) does not clear all value and then set value
     reset(question);
-    /* DANGER react-hook-form bugs */
-    trigger(); // trigger 'answer' validation
-    setTimeout(trigger, 0); // trigger 'title, qType, content validation'
+    trigger();
   }, [question]);
 
   const [qTypeValue, contentValue] = watch(['qType', 'content']);
@@ -50,29 +70,16 @@ export default function QuestionMeta({ question, setQuestion }: QuestionMetaProp
     return qTypeValue === 'input';
   }, [qTypeValue]);
 
+  // now qType change only setvalue, no need to change validation based on latest qType value
   const handleQTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    /* auto: qType changed => render UI only => (other op) => change event & update model
-     * manual: qType changed => render UI only => manual update model
-     * [auto] can also prevents user from submitting, but the button status will be wrong for a moment
-     * so, [manual]
-     */
-
-    /*
-     * not useEffect: setValue will be called after init, because qType changed from '' to 'single'
-     */
     setValue('answer', null);
-
-    // 'content' can be controlled correctly on template
-    // only 'answer' needs to control manually, maybe child component cannot get newest value in onchangeevent
     const latestQTypeValue = e.currentTarget.value;
     if (latestQTypeValue === 'input') {
       setValue('content', '');
       setValue('analysis', '');
-      unregister(['answer']);
-    } else {
-      register('answer', { required: true });
     }
-    trigger();
+
+    trigger(); // still need trigger
   };
 
   return (
@@ -88,7 +95,6 @@ export default function QuestionMeta({ question, setQuestion }: QuestionMetaProp
           control={control}
           name="title"
           render={({ field }) => <RDWEditor initRowData={getValues()} updateFormFieldValue={field.onChange} />}
-          rules={{ required: true }}
         />
 
         <label>Type</label>
@@ -101,15 +107,11 @@ export default function QuestionMeta({ question, setQuestion }: QuestionMetaProp
         {!isFeedBack && (
           <div>
             <label>Content</label>
-            <textarea {...register('content', { required: true })} />
+            <textarea {...register('content')} />
 
             <label>Answer</label>
-            {qTypeValue === 'single' && (
-              <RadioGroup options={options} registed={register('answer', { required: true })} />
-            )}
-            {qTypeValue === 'multi' && (
-              <CheckGroup options={options} registed={register('answer', { required: true })} />
-            )}
+            {qTypeValue === 'single' && <RadioGroup options={options} registed={register('answer')} />}
+            {qTypeValue === 'multi' && <CheckGroup options={options} registed={register('answer')} />}
 
             <label>Analysis</label>
             <input {...register('analysis')} />
