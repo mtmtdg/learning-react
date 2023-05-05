@@ -1,18 +1,20 @@
-import { FormikHelpers, FormikProvider, useFormik } from 'formik';
+import { FieldArray, FormikHelpers, FormikProvider, useFormik } from 'formik';
 import styles from './Home.module.css';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { z } from 'zod';
 import FormikInput from '../../components/formTools/FormikInput/FormikInput';
 import SubmitButton from '../../components/formTools/SubmitButton/SubmitButton';
 import FormikTextArray from '../../components/formTools/FormikTextArray/FormikTextArray';
+import { Button, IconButton } from '@mui/material';
+import { Add, Delete } from '@mui/icons-material';
 
 interface HomeProps {}
 
 const schema = z.object({
-  firstName: z.string().min(5),
-  lastName: z.string().min(5),
-  email: z.string().email(),
-  test: z.string().array().min(2),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  test: z.string().array(),
+  arr: z.object({ a: z.string(), b: z.string() }).array(),
 });
 
 const initialValues = {
@@ -20,6 +22,10 @@ const initialValues = {
   lastName: '',
   email: '',
   test: [],
+  arr: [
+    { a: '1', b: '2' },
+    { a: '2', b: '3' },
+  ],
 };
 
 const onSubmit = (values: any, { setSubmitting }: FormikHelpers<any>) => {
@@ -34,10 +40,9 @@ export default function Home(props: HomeProps) {
     initialValues,
     validationSchema: toFormikValidationSchema(schema),
     onSubmit,
-    validateOnMount: true,
   });
 
-  const { handleSubmit } = formik;
+  const { values, handleSubmit } = formik;
 
   return (
     <div className={styles.Home}>
@@ -49,6 +54,28 @@ export default function Home(props: HomeProps) {
           <FormikInput label="Last Name" name="lastName" />
           <FormikInput label="Email Address" name="email" />
           <FormikTextArray label="test" name="test" />
+          {/* Formik(issues1476)说想添加一个useFieldArray来获取render中的arrayHelper参数,但最终没有人负责搞出来,仅有人自己封装一些hook */}
+          <FieldArray
+            name="arr"
+            render={arrayHelpers => {
+              return (
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  {values.arr?.map((group, index) => (
+                    <div key={index}>
+                      <FormikInput label="a" name={`arr.${index}.a`} />
+                      <FormikInput label="b" name={`arr.${index}.b`} />
+                      <IconButton onClick={() => arrayHelpers.remove(index)}>
+                        <Delete />
+                      </IconButton>
+                    </div>
+                  ))}
+                  <IconButton onClick={() => arrayHelpers.push({ a: '', b: '' })}>
+                    <Add />
+                  </IconButton>
+                </div>
+              );
+            }}
+          />
           <SubmitButton>Submit</SubmitButton>
         </form>
       </FormikProvider>
