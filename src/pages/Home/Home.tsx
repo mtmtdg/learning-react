@@ -24,6 +24,8 @@ const initialValues = {
 
 const onSubmit = (values: any, { setSubmitting }: FormikHelpers<any>) => {
   console.log(values);
+  // formik似乎无法自动将submitting切换为false状态,因此需要手动调用
+  // 而useFormik的声明,可能落后于onSubmit的定义,因此onSubmit的第二个参数中,附带了一些动作函数.
   setSubmitting(false);
 };
 
